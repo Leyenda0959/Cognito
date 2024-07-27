@@ -13,7 +13,7 @@ module.exports = {
 
       // Enviar mensaje privado de bienvenida y notificación de cambio de nombre
       await member.send('```Bienvenido al servidor. Tu nombre ha sido cambiado a ***"Anonymous"*** para proteger tu privacidad.``` ***para doble capa de seguridad manda mensaje al dm al bot y se enviara al canal general***               *** !! Si envías mensaje directamente algun canal del servidor se mostrara tu nombre por un breve periodo de tiempo !!!***');
-      await member.send(`***Para hablar en un canal en específico se cumple ma siguiente regla***: Hola mundo ``{linux}```, ```{code}```)
+      await member.send(`***Para hablar en un canal en específico se cumple ma siguiente regla***: Hola mundo ``{linux}```, ```{code}```);
         
     } catch (error) {
       console.error('Error al manejar la incorporación del nuevo miembro:', error);
