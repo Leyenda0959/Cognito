@@ -1,9 +1,6 @@
 require('dotenv').config();
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 8080;
 
 const token = process.env.DISCORD_TOKEN;
 
@@ -30,10 +27,6 @@ for (const file of eventFiles) {
     client.on(event.name, (...args) => event.execute(...args, client));
   }
 }
-
-// Configuración del servidor web para mantener el Repl activo
-app.get('/', (req, res) => res.send('Bot is running!'));
-app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`));
 
 // Manejo de señales de apagado
 const handleShutdown = async (signal) => {
