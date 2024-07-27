@@ -1,6 +1,7 @@
+const { Events } = require('discord.js');
 const cooldowns = new Map();
 const MAX_MESSAGE_LENGTH = 2000;
-let messageCounter = 1; // Variable global para el contador
+let messageCounter = 1;
 
 function containsLink(content) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -12,7 +13,7 @@ function isMessageTooLong(content) {
 }
 
 module.exports = {
-  name: 'messageCreate',
+  name: Events.MessageCreate,
   async execute(message, client) {
     if (message.author.bot) return;
 
