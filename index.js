@@ -2,7 +2,7 @@ require('dotenv').config();
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 
-const token = process.env.DISCORD_TOKEN;
+const token = OTY5ODExNzQ1OTczNjE2Njkw.GGQp5G.1qYf8IIDcJAgvmn_Ugl4CeMQgKrXVx4_h7Pg5Q;
 
 const client = new Client({ 
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES],
