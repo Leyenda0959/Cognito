@@ -46,3 +46,4 @@ process.on('SIGINT', handleShutdown);
 process.on('SIGTERM', handleShutdown);
 
 client.login(token);
+      
