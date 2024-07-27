@@ -16,75 +16,61 @@ module.exports = {
   async execute(message, client) {
     if (message.author.bot) return;
 
-    // Log para depuración
-    console.log(`Mensaje recibido: ${message.content}`);
+    const now = Date.now();
+    const cooldown = cooldowns.get(message.author.id);
+
+    if (cooldown && (now - cooldown) < 5000) {
+      await message.author.send("Por favor, espera 5 segundos antes de enviar otro mensaje.");
+      return;
+    }
+
+    cooldowns.set(message.author.id, now);
 
     if (message.channel.type === 'DM') {
-      const guild = client.guilds.cache.get('1262219586506592268');
-      if (!guild) return;
+      // Manejo de mensajes directos
+      const guild = client.guilds.cache.get('1262219586506592268'); // Reemplaza con tu ID de servidor
+      const targetChannel = guild.channels.cache.get('1265181330665246750'); // Reemplaza con tu ID de canal objetivo
+      const logChannel = guild.channels.cache.get('1262916407344238592'); // Reemplaza con tu ID de canal de registro
 
-      const targetChannel = guild.channels.cache.get('1265181330665246750');
-      const logChannel = guild.channels.cache.get('1262916407344238592');
+      if (!guild || !targetChannel || !logChannel) return;
 
-      if (!targetChannel || !logChannel) return;
-
-      const cooldown = cooldowns.get(message.author.id);
-      const now = Date.now();
-
-      if (cooldown && (now - cooldown) < 5000) {
-        await message.author.send("Por favor, espera 5 segundos antes de enviar otro mensaje.");
+      if (containsLink(message.content)) {
+        await message.author.send("No se permiten enlaces en los mensajes.");
         return;
       }
 
-      cooldowns.set(message.author.id, now);
+      if (isMessageTooLong(message.content)) {
+        await message.author.send("El mensaje es demasiado largo. Por favor, reduce su longitud.");
+        return;
+      }
 
+      const messageNumber = messageCounter++;
       try {
-        if (containsLink(message.content)) {
-          await message.author.send("No se permiten enlaces en los mensajes.");
-          return;
-        }
-
-        if (isMessageTooLong(message.content)) {
-          await message.author.send("El mensaje es demasiado largo. Por favor, reduce su longitud.");
-          return;
-        }
-
-        // Verifica que el mensaje no esté vacío
-        if (!message.content.trim()) {
-          await message.author.send("El mensaje no puede estar vacío.");
-          return;
-        }
-
-        const messageNumber = messageCounter++;
         await targetChannel.send(`${messageNumber} ***>>*** ${message.content}`);
         await logChannel.send(`@${message.author.tag}: [privado] ${message.content}`);
       } catch (error) {
         console.error('Error al manejar el mensaje privado:', error);
       }
     } else {
-      const logChannel = message.guild.channels.cache.get('1262916407344238592');
+      // Manejo de mensajes en el servidor
+      const logChannel = message.guild.channels.cache.get('1262916407344238592'); // Reemplaza con tu ID de canal de registro
+
       if (!logChannel) return;
 
+      if (containsLink(message.content)) {
+        await message.author.send("No se permiten enlaces en los mensajes.");
+        await message.delete();
+        return;
+      }
+
+      if (isMessageTooLong(message.content)) {
+        await message.author.send("El mensaje es demasiado largo. Por favor, reduce su longitud.");
+        await message.delete();
+        return;
+      }
+
+      const messageNumber = messageCounter++;
       try {
-        if (containsLink(message.content)) {
-          await message.author.send("No se permiten enlaces en los mensajes.");
-          await message.delete();
-          return;
-        }
-
-        if (isMessageTooLong(message.content)) {
-          await message.author.send("El mensaje es demasiado largo. Por favor, reduce su longitud.");
-          await message.delete();
-          return;
-        }
-
-        // Verifica que el mensaje no esté vacío
-        if (!message.content.trim()) {
-          await message.author.send("El mensaje no puede estar vacío.");
-          return;
-        }
-
-        const messageNumber = messageCounter++;
         await message.delete();
         await logChannel.send(`@${message.author.tag}: ${message.content}`);
         await message.channel.send(`${messageNumber} ***>*** ${message.content}`);
@@ -94,4 +80,3 @@ module.exports = {
     }
   }
 };
-  
