@@ -1,7 +1,6 @@
-const { Events } = require('discord.js');
 const cooldowns = new Map();
 const MAX_MESSAGE_LENGTH = 2000;
-let messageCounter = 1;
+let messageCounter = 1; // Variable global para el contador
 
 function containsLink(content) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -13,9 +12,12 @@ function isMessageTooLong(content) {
 }
 
 module.exports = {
-  name: Events.MessageCreate,
+  name: 'messageCreate',
   async execute(message, client) {
     if (message.author.bot) return;
+
+    // Log para depuración
+    console.log(`Mensaje recibido: ${message.content}`);
 
     if (message.channel.type === 'DM') {
       const guild = client.guilds.cache.get('1262219586506592268');
@@ -47,6 +49,12 @@ module.exports = {
           return;
         }
 
+        // Verifica que el mensaje no esté vacío
+        if (!message.content.trim()) {
+          await message.author.send("El mensaje no puede estar vacío.");
+          return;
+        }
+
         const messageNumber = messageCounter++;
         await targetChannel.send(`${messageNumber} ***>>*** ${message.content}`);
         await logChannel.send(`@${message.author.tag}: [privado] ${message.content}`);
@@ -70,6 +78,12 @@ module.exports = {
           return;
         }
 
+        // Verifica que el mensaje no esté vacío
+        if (!message.content.trim()) {
+          await message.author.send("El mensaje no puede estar vacío.");
+          return;
+        }
+
         const messageNumber = messageCounter++;
         await message.delete();
         await logChannel.send(`@${message.author.tag}: ${message.content}`);
@@ -80,3 +94,4 @@ module.exports = {
     }
   }
 };
+  
