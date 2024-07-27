@@ -1,14 +1,13 @@
 {
-  "builds": [
-    {
-      "src": "index.js",
-      "use": "@railway/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/.*",
-      "dest": "index.js"
-    }
-  ]
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "runtime": "V2",
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
 }
