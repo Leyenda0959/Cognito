@@ -7,8 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "discord.js": "^14.5.3",
-    "dotenv": "^10.0.0",
-    "express": "^4.19.2"
+    "discord.js": "^14.15.3",
+    "dotenv": "^10.0.0"
   }
 }
