@@ -1,10 +1,6 @@
 const cooldowns = new Map();
 const MAX_MESSAGE_LENGTH = 2000;
-const DEFAULT_CHANNEL_ID = '1266856936276758629';
-const CHANNELS = {
-  linux: '1266859084619972740', // Reemplaza con el ID del canal 'linux'
-  code: '1266858510369427526'   // Reemplaza con el ID del canal 'code'
-};
+let messageCounter = 1; // Variable global para el contador
 
 function containsLink(content) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -15,24 +11,21 @@ function isMessageTooLong(content) {
   return content.length > MAX_MESSAGE_LENGTH;
 }
 
+const IGNORED_CHANNEL_ID = 'ID_DEL_CANAL_A_IGNORAR'; // Reemplaza con el ID del canal que quieres ignorar
+
 module.exports = {
   name: 'messageCreate',
   async execute(message, client) {
     if (message.author.bot) return;
 
     if (message.channel.type === 'DM') {
-      const content = message.content;
-      let targetChannelId = DEFAULT_CHANNEL_ID;
+      const guild = client.guilds.cache.get('1262219586506592268');
+      if (!guild) return;
 
-      // Extraer el canal objetivo del mensaje
-      const channelNameMatch = content.match(/\{(linux|code)\}/);
-      if (channelNameMatch) {
-        const channelName = channelNameMatch[1];
-        targetChannelId = CHANNELS[channelName] || DEFAULT_CHANNEL_ID;
-      }
+      const targetChannel = guild.channels.cache.get('1265181330665246750');
+      const logChannel = guild.channels.cache.get('1262916407344238592');
 
-      const targetChannel = client.channels.cache.get(targetChannelId);
-      if (!targetChannel) return;
+      if (!targetChannel || !logChannel) return;
 
       const cooldown = cooldowns.get(message.author.id);
       const now = Date.now();
@@ -45,23 +38,25 @@ module.exports = {
       cooldowns.set(message.author.id, now);
 
       try {
-        if (containsLink(content)) {
+        if (containsLink(message.content)) {
           await message.author.send("No se permiten enlaces en los mensajes.");
           return;
         }
 
-        if (isMessageTooLong(content)) {
+        if (isMessageTooLong(message.content)) {
           await message.author.send("El mensaje es demasiado largo. Por favor, reduce su longitud.");
           return;
         }
 
-        // Eliminar el marcador de canal del mensaje antes de enviarlo
-        const cleanedContent = content.replace(/\{(linux|code)\}/, '').trim();
-        await targetChannel.send(cleanedContent);
+        const messageNumber = messageCounter++;
+        await targetChannel.send(`${messageNumber} ***>>*** ${message.content}`);
+        await logChannel.send(`@${message.author.tag}: [privado] ${message.content}`);
       } catch (error) {
         console.error('Error al manejar el mensaje privado:', error);
       }
     } else {
+      if (message.channel.id === IGNORED_CHANNEL_ID) return;
+
       const logChannel = message.guild.channels.cache.get('1262916407344238592');
       if (!logChannel) return;
 
@@ -78,9 +73,10 @@ module.exports = {
           return;
         }
 
+        const messageNumber = messageCounter++;
         await message.delete();
         await logChannel.send(`@${message.author.tag}: ${message.content}`);
-        await message.channel.send(`${message.content}`);
+        await message.channel.send(`${messageNumber} ***>*** ${message.content}`);
       } catch (error) {
         console.error('Error al manejar el mensaje en el servidor:', error);
       }
