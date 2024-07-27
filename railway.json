@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@railway/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "index.js"
+    }
+  ]
+}
