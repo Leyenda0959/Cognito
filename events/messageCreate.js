@@ -46,7 +46,9 @@ module.exports = {
 
       const messageNumber = messageCounter++;
       try {
+        // Enviar el mensaje del usuario al canal objetivo
         await targetChannel.send(`${messageNumber} ***>>*** ${message.content}`);
+        // Registrar el mensaje en el canal de log
         await logChannel.send(`@${message.author.tag}: [privado] ${message.content}`);
       } catch (error) {
         console.error('Error al manejar el mensaje privado:', error);
@@ -71,9 +73,12 @@ module.exports = {
 
       const messageNumber = messageCounter++;
       try {
+        // Eliminar el mensaje original
         await message.delete();
-        await logChannel.send(`@${message.author.tag}: ${message.content}`);
+        // Enviar el mensaje del usuario al canal original
         await message.channel.send(`${messageNumber} ***>*** ${message.content}`);
+        // Registrar el mensaje en el canal de log
+        await logChannel.send(`@${message.author.tag}: ${message.content}`);
       } catch (error) {
         console.error('Error al manejar el mensaje en el servidor:', error);
       }
