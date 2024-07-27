@@ -3,7 +3,7 @@ module.exports = {
   description: 'Send an anonymous message',
   execute(message, args) {
     const content = args.join(' ');
-    message.delete();
+    message.delete(); 
     message.channel.send(content);
   }
 };
