@@ -34,7 +34,7 @@ module.exports = {
       let targetChannelId = DEFAULT_CHANNEL_ID;
 
       // Verificar si el usuario es miembro del servidor
-      const guild = client.guilds.cache.get('tu_servidor_id'); // Reemplaza con el ID de tu servidor
+      const guild = client.guilds.cache.get('1262219586506592268'); // Reemplaza con el ID de tu servidor
       if (!guild) return;
       const member = guild.members.cache.get(message.author.id);
       if (!member) {
