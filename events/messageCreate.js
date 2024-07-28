@@ -11,7 +11,7 @@ function isMessageTooLong(content) {
   return content.length > MAX_MESSAGE_LENGTH;
 }
 
-const IGNORED_CHANNEL_ID = 'ID_DEL_CANAL_A_IGNORAR'; // Reemplaza con el ID del canal que quieres ignorar
+const IGNORED_CHANNEL_ID = '1266909422358233089'; // Reemplaza con el ID del canal que quieres ignorar
 
 module.exports = {
   name: 'messageCreate',
@@ -22,7 +22,7 @@ module.exports = {
       const guild = client.guilds.cache.get('1262219586506592268');
       if (!guild) return;
 
-      const targetChannel = guild.channels.cache.get('1265181330665246750');
+      const targetChannel = guild.channels.cache.get('1266856936276758629');
       const logChannel = guild.channels.cache.get('1262916407344238592');
 
       if (!targetChannel || !logChannel) return;
