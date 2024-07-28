@@ -2,10 +2,10 @@ const cooldowns = new Map();
 const MAX_MESSAGE_LENGTH = 2000;
 const DEFAULT_CHANNEL_ID = '1266856936276758629';
 const CHANNELS = {
-  linux: '1266859084619972740', // Reemplaza con el ID del canal 'linux'
-  code: '1266858510369427526'   // Reemplaza con el ID del canal 'code'
+  linux: '1266859084619972740',
+  code: '1266858510369427526'
 };
-const IGNORED_CHANNEL_ID = '1266909422358233089'; // Reemplaza con el ID del canal que deseas ignorar
+const IGNORED_CHANNEL_ID = '1266909422358233089';
 
 function containsLink(content) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -26,11 +26,13 @@ module.exports = {
   async execute(message, client) {
     if (message.author.bot) return;
 
+    // Manejo de comandos
+    if (message.content.startsWith('%')) return;
+
     if (message.channel.type === 'DM') {
       const content = message.content;
       let targetChannelId = DEFAULT_CHANNEL_ID;
 
-      // Extraer el canal objetivo del mensaje
       const channelNameMatch = content.match(/\{(linux|code)\}/);
       if (channelNameMatch) {
         const channelName = channelNameMatch[1];
@@ -66,7 +68,6 @@ module.exports = {
           return;
         }
 
-        // Eliminar el marcador de canal del mensaje antes de enviarlo
         const cleanedContent = content.replace(/\{(linux|code)\}/, '').trim();
         await targetChannel.send(cleanedContent);
       } catch (error) {
@@ -74,7 +75,7 @@ module.exports = {
       }
     } else {
       if (message.channel.id === IGNORED_CHANNEL_ID && !message.content.startsWith('%clear')) {
-        return; // Ignorar mensajes en el canal específico, excepto el comando %clear
+        return;
       }
 
       const logChannel = message.guild.channels.cache.get('1262916407344238592');
