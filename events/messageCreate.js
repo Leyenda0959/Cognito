@@ -26,6 +26,14 @@ module.exports = {
   async execute(message, client) {
     if (message.author.bot) return;
 
+    if (message.content.startsWith('%delmessage')) {
+      return; // No ignorar el comando %delmessage
+    }
+
+    if (message.channel.id === IGNORED_CHANNEL_ID) {
+      return; // Ignorar mensajes en el canal específico
+    }
+
     if (message.channel.type === 'DM') {
       const content = message.content;
       let targetChannelId = DEFAULT_CHANNEL_ID;
@@ -73,10 +81,6 @@ module.exports = {
         console.error('Error al manejar el mensaje privado:', error);
       }
     } else {
-      if (message.channel.id === IGNORED_CHANNEL_ID) {
-        return; // Ignorar mensajes en el canal específico
-      }
-
       const logChannel = message.guild.channels.cache.get('1262916407344238592');
       if (!logChannel) return;
 
@@ -108,3 +112,4 @@ module.exports = {
     }
   }
 };
+          
