@@ -28,7 +28,7 @@ module.exports = {
 
     if (message.channel.type === 'DM') {
       const content = message.content;
-      let targetChannelId = 1266856936276758629;
+      let targetChannelId = DEFAULT_CHANNEL_ID;
 
       // Extraer el canal objetivo del mensaje
       const channelNameMatch = content.match(/\{(linux|code)\}/);
