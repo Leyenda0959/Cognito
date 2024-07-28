@@ -12,6 +12,11 @@ function containsLink(content) {
   return urlRegex.test(content);
 }
 
+function containsMention(content) {
+  const mentionRegex = /@(?:everyone|here|[&!]\d+)/g;
+  return mentionRegex.test(content);
+}
+
 function isMessageTooLong(content) {
   return content.length > MAX_MESSAGE_LENGTH;
 }
@@ -51,6 +56,11 @@ module.exports = {
           return;
         }
 
+        if (containsMention(content)) {
+          await message.author.send("No se permiten menciones en los mensajes.");
+          return;
+        }
+
         if (isMessageTooLong(content)) {
           await message.author.send("El mensaje es demasiado largo. Por favor, reduce su longitud.");
           return;
@@ -73,6 +83,12 @@ module.exports = {
       try {
         if (containsLink(message.content)) {
           await message.author.send("No se permiten enlaces en los mensajes.");
+          await message.delete();
+          return;
+        }
+
+        if (containsMention(message.content)) {
+          await message.author.send("No se permiten menciones en los mensajes.");
           await message.delete();
           return;
         }
