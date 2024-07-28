@@ -1,50 +1,24 @@
-const { MessageEmbed } = require('discord.js');
-
 module.exports = {
   name: 'clear',
-  description: 'Borra todos los mensajes de un usuario en todo el servidor.',
+  description: 'Borra una cantidad específica de mensajes en el canal actual',
   async execute(message, args) {
     if (!message.member.permissions.has('MANAGE_MESSAGES')) {
       return message.reply('No tienes permisos para usar este comando.');
     }
 
-    const user = message.mentions.users.first();
-    if (!user) {
-      return message.reply('Debes mencionar a un usuario para borrar sus mensajes.');
+    const amount = parseInt(args[0]);
+
+    if (isNaN(amount) || amount <= 0 || amount > 100) {
+      return message.reply('Debes especificar un número entre 1 y 100.');
     }
 
-    const fetchMessages = async (channel) => {
-      let messages;
-      let messageCount = 0;
-      let lastMessageId = null;
-
-      do {
-        messages = await channel.messages.fetch({ limit: 100, before: lastMessageId });
-        const userMessages = messages.filter(msg => msg.author.id === user.id);
-
-        for (const [msgId, msg] of userMessages) {
-          await msg.delete();
-        }
-
-        messageCount += userMessages.size;
-        lastMessageId = messages.last() ? messages.last().id : null;
-      } while (messages.size === 100);
-
-      return messageCount;
-    };
-
-    let totalDeleted = 0;
-    const channels = message.guild.channels.cache.filter(channel => channel.isText());
-
-    for (const [channelId, channel] of channels) {
-      totalDeleted += await fetchMessages(channel);
+    try {
+      await message.channel.bulkDelete(amount, true);
+      const reply = await message.channel.send(`Se han borrado ${amount} mensajes.`);
+      setTimeout(() => reply.delete(), 5000); // Eliminar el mensaje de confirmación después de 5 segundos
+    } catch (error) {
+      console.error('Error al borrar mensajes:', error);
+      message.reply('Hubo un error al intentar borrar los mensajes en este canal.');
     }
-
-    const embed = new MessageEmbed()
-      .setTitle('Limpieza de Mensajes')
-      .setDescription(`Se han borrado ${totalDeleted} mensajes de ${user.tag}.`)
-      .setColor('#FF0000');
-
-    message.channel.send({ embeds: [embed] });
   },
 };
