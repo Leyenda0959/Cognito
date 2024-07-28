@@ -28,7 +28,7 @@ module.exports = {
 
     if (message.channel.type === 'DM') {
       const content = message.content;
-      let targetChannelId = DEFAULT_CHANNEL_ID;
+      let targetChannelId = 1266856936276758629;
 
       // Extraer el canal objetivo del mensaje
       const channelNameMatch = content.match(/\{(linux|code)\}/);
@@ -101,7 +101,7 @@ module.exports = {
 
         await message.delete();
         await logChannel.send(`@${message.author.tag}: ${message.content}`);
-        await message.channel.send(`${message.content}`);
+        await message.channel.send(`***>*** ${message.content}`);
       } catch (error) {
         console.error('Error al manejar el mensaje en el servidor:', error);
       }
