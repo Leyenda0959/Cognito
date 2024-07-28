@@ -101,7 +101,7 @@ module.exports = {
 
         await message.delete();
         await logChannel.send(`@${message.author.tag}: ${message.content}`);
-        await message.channel.send(`***>*** ${message.content}`);
+        await message.channel.send(`****>**** ${message.content}`);
       } catch (error) {
         console.error('Error al manejar el mensaje en el servidor:', error);
       }
