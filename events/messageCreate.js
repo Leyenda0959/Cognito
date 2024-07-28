@@ -33,16 +33,6 @@ module.exports = {
       const content = message.content;
       let targetChannelId = DEFAULT_CHANNEL_ID;
 
-      // Verificar si el usuario es miembro del servidor
-      const guild = client.guilds.cache.get('1262219586506592268'); // Reemplaza con el ID de tu servidor
-      if (!guild) return;
-      const member = guild.members.cache.get(message.author.id);
-      if (!member) {
-        await message.author.send("No eres miembro del servidor. No puedes enviar mensajes.");
-        return;
-      }
-
-      // Extraer el canal objetivo del mensaje
       const channelNameMatch = content.match(/\{(linux|code)\}/);
       if (channelNameMatch) {
         const channelName = channelNameMatch[1];
@@ -78,9 +68,8 @@ module.exports = {
           return;
         }
 
-        // Eliminar el marcador de canal del mensaje antes de enviarlo
         const cleanedContent = content.replace(/\{(linux|code)\}/, '').trim();
-        await targetChannel.send(`@${message.author.tag}: ${cleanedContent}`);
+        await targetChannel.send(cleanedContent);
       } catch (error) {
         console.error('Error al manejar el mensaje privado:', error);
       }
