@@ -5,8 +5,13 @@ const fs = require('fs');
 const token = process.env.DISCORD_TOKEN;
 
 const client = new Client({ 
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES],
-  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+  intents: [
+    Intents.FLAGS.GUILDS, 
+    Intents.FLAGS.GUILD_MESSAGES, 
+    Intents.FLAGS.GUILD_MEMBERS, 
+    Intents.FLAGS.DIRECT_MESSAGES
+  ],
+  partials: ['CHANNEL']
 });
 
 client.commands = new Collection();
@@ -28,4 +33,22 @@ for (const file of eventFiles) {
   }
 }
 
+// Manejo de señales de apagado
+const handleShutdown = async (signal) => {
+  console.log(`Recibida señal ${signal}. Apagando el bot...`);
+  const channelId = '1262647172193583115'; // Reemplaza con el ID del canal donde quieres enviar el mensaje de apagado
+  const channel = client.channels.cache.get(channelId);
+  if (channel) {
+    await channel.send('El bot está a punto de apagarse. Guardando el estado...');
+  }
+
+  // Realiza aquí cualquier limpieza adicional que necesites
+  await client.destroy();
+  process.exit(0);
+};
+
+process.on('SIGINT', handleShutdown);
+process.on('SIGTERM', handleShutdown);
+
 client.login(token);
+}
