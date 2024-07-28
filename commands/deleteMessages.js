@@ -27,10 +27,11 @@ module.exports = {
       const fetchedMessages = await targetChannel.messages.fetch({ limit: amount });
       await targetChannel.bulkDelete(fetchedMessages, true);
       const reply = await message.channel.send(`Se han borrado ${amount} mensajes en ${targetChannel}.`);
-      setTimeout(() => reply.delete(), 5000); // Eliminar el mensaje de confirmación después de 5 segundos
+      setTimeout(() => reply.delete(), 5000);
     } catch (error) {
       console.error('Error al borrar mensajes:', error);
       message.reply('Hubo un error al intentar borrar los mensajes en este canal.');
     }
   },
 };
+      
