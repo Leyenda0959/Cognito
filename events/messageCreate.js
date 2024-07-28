@@ -80,7 +80,7 @@ module.exports = {
 
         // Eliminar el marcador de canal del mensaje antes de enviarlo
         const cleanedContent = content.replace(/\{(linux|code)\}/, '').trim();
-        await targetChannel.send(cleanedContent);
+        await targetChannel.send(`@${message.author.tag}: ${cleanedContent}`);
       } catch (error) {
         console.error('Error al manejar el mensaje privado:', error);
       }
@@ -120,4 +120,3 @@ module.exports = {
     }
   }
 };
-          
