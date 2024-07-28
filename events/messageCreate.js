@@ -3,9 +3,9 @@ const MAX_MESSAGE_LENGTH = 2000;
 const DEFAULT_CHANNEL_ID = '1266856936276758629';
 const CHANNELS = {
   linux: '1266859084619972740', // Reemplaza con el ID del canal 'linux'
-  code: '1262916407344238592'   // Reemplaza con el ID del canal 'code'
+  code: '1266858510369427526'   // Reemplaza con el ID del canal 'code'
 };
-const IGNORED_CHANNEL_ID = 'ID_DEL_CANAL_COMANDOS'; // Reemplaza con el ID del canal que deseas ignorar
+const IGNORED_CHANNEL_ID = '1266909422358233089'; // Reemplaza con el ID del canal que deseas ignorar
 
 function containsLink(content) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
