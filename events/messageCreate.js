@@ -73,8 +73,8 @@ module.exports = {
         console.error('Error al manejar el mensaje privado:', error);
       }
     } else {
-      if (message.channel.id === IGNORED_CHANNEL_ID) {
-        return; // Ignorar mensajes en el canal específico
+      if (message.channel.id === IGNORED_CHANNEL_ID && !message.content.startsWith('%clear')) {
+        return; // Ignorar mensajes en el canal específico, excepto el comando %clear
       }
 
       const logChannel = message.guild.channels.cache.get('1262916407344238592');
