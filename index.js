@@ -35,7 +35,7 @@ for (const file of eventFiles) {
 
 // Función para borrar mensajes después de un cierto tiempo
 async function autoDeleteMessages() {
-  const deleteAfterMilliseconds = 60000; // 1 minuto
+  const deleteAfterMilliseconds = 500; // 1 minuto
 
   client.on('messageCreate', async (message) => {
     if (message.author.bot) return; // Ignora los mensajes del bot
