@@ -33,21 +33,23 @@ for (const file of eventFiles) {
   }
 }
 
-// Manejo de señales de apagado
-const handleShutdown = async (signal) => {
-  console.log(`Recibida señal ${signal}. Apagando el bot...`);
-  const channelId = '1262647172193583115'; // Reemplaza con el ID del canal donde quieres enviar el mensaje de apagado
-  const channel = client.channels.cache.get(channelId);
-  if (channel) {
-    await channel.send('El bot está a punto de apagarse. Guardando el estado...');
-  }
+// Función para borrar mensajes después de un cierto tiempo
+async function autoDeleteMessages() {
+  const deleteAfterMilliseconds = 60000; // 1 minuto
 
-  // Realiza aquí cualquier limpieza adicional que necesites
-  await client.destroy();
-  process.exit(0);
-};
+  client.on('messageCreate', async (message) => {
+    if (message.author.bot) return; // Ignora los mensajes del bot
 
-process.on('SIGINT', handleShutdown);
-process.on('SIGTERM', handleShutdown);
+    setTimeout(async () => {
+      try {
+        await message.delete();
+      } catch (err) {
+        console.error('Error al borrar el mensaje:', err);
+      }
+    }, deleteAfterMilliseconds);
+  });
+}
+
+autoDeleteMessages();
 
 client.login(token);
